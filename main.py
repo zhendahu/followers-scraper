@@ -49,6 +49,7 @@ def find_followers(driver):
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
     PASSWORD = input("Please enter your password: \n")
+    SCROLL_BUFFER = 0.5
 
     followers = set()
     driver = webdriver.Chrome()
@@ -58,11 +59,23 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
+
     driver.get("http://www.instagram.com/zhendawho/followers")
 
     time.sleep(2)
 
-    followers = find_followers(driver)
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("return document.body.scrollHeight")
+        time.sleep(SCROLL_BUFFER)
+
+        followers.update(find_followers(driver))
+
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        
+        last_height = new_height
     
     # <div class=" _ab8y  _ab94 _ab97 _ab9f _ab9k _ab9p _abcm">anuj.the.manuj</div>
 
