@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 import unittest
 import time
 
@@ -66,16 +67,16 @@ if __name__ == "__main__":
 
     last_height = driver.execute_script("return document.body.scrollHeight")
     while True:
-        driver.execute_script("return document.body.scrollHeight")
+        ActionChains(driver)\
+            .scroll_by_amount(0, 200)\
+            .perform()
+
         time.sleep(SCROLL_BUFFER)
 
+        followers_prev = followers
         followers.update(find_followers(driver))
 
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
+        if followers == followers_prev:
             break
-        
-        last_height = new_height
     
-    # <div class=" _ab8y  _ab94 _ab97 _ab9f _ab9k _ab9p _abcm">anuj.the.manuj</div>
 
