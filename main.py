@@ -1,3 +1,4 @@
+from argparse import Action
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -29,19 +30,12 @@ def login(driver):
 
 def find_followers(driver):
     followers = set()
-    print("finding followers")
     followers_list = driver.find_elements(By.CLASS_NAME, "_ab8y")
 
     for i in followers_list:
         innerText = i.get_attribute("innerText")
-
-        print(innerText)
         if(innerText != '.' and innerText != '·') :
             followers.add(innerText)
-
-    print("writing followers")
-    with open('followers.txt', 'a') as file:
-        file.write('\n'.join(followers) + "\n")
 
     print("done!")
     return followers
@@ -54,6 +48,8 @@ if __name__ == "__main__":
 
     followers = set()
     driver = webdriver.Chrome()
+    driver.set_window_size(1080, 800)
+    driver.set_window_position(0,0)
     driver.get(f"http://www.instagram.com")
 
     login(driver)
@@ -65,11 +61,14 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
-    last_height = driver.execute_script("return document.body.scrollHeight")
+    follower_window = driver.find_element(By.CLASS_NAME, "_aano").click()
+    #525, 573
     while True:
-        ActionChains(driver)\
-            .scroll_by_amount(0, 200)\
-            .perform()
+
+        scroll = ActionChains(driver)
+        scroll.scroll_by_amount(0, 100)
+        scroll.perform()
+        print("Scrolled")
 
         time.sleep(SCROLL_BUFFER)
 
@@ -79,4 +78,5 @@ if __name__ == "__main__":
         if followers == followers_prev:
             break
     
-
+    with open('followers.txt', 'a') as file:
+        file.write('\n'.join(followers) + "\n")
