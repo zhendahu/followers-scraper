@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 import unittest
 import time
+from pynput.mouse import Button, Controller
 
 def login(driver):
     username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[name='username']")))
@@ -59,16 +60,20 @@ if __name__ == "__main__":
     driver.get("http://www.instagram.com/zhendawho/followers")
 
     time.sleep(2)
+    mouse = Controller()
+    mouse.position = (525, 573)
     #525, 573
     while True:
-
+        mouse.scroll(0, -40)
         time.sleep(SCROLL_BUFFER)
 
         followers_prev = followers
         followers.update(find_followers(driver))
 
-        if input() == "done":
+        if followers_prev == followers:
+            print("Breaking")
             break
+
 
     with open('followers.txt', 'a') as file:
         file.write('\n'.join(followers) + "\n")
