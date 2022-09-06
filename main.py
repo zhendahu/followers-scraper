@@ -1,4 +1,3 @@
-from argparse import Action
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -60,23 +59,16 @@ if __name__ == "__main__":
     driver.get("http://www.instagram.com/zhendawho/followers")
 
     time.sleep(2)
-
-    follower_window = driver.find_element(By.CLASS_NAME, "_aano").click()
     #525, 573
     while True:
-
-        scroll = ActionChains(driver)
-        scroll.scroll_by_amount(0, 100)
-        scroll.perform()
-        print("Scrolled")
 
         time.sleep(SCROLL_BUFFER)
 
         followers_prev = followers
         followers.update(find_followers(driver))
 
-        if followers == followers_prev:
+        if input() == "done":
             break
-    
+
     with open('followers.txt', 'a') as file:
         file.write('\n'.join(followers) + "\n")
