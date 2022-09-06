@@ -4,8 +4,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from pynput.mouse import Button, Controller
   
 driver = webdriver.Chrome()
+driver.set_window_size(1080, 800)
+driver.set_window_position(0,0)
+
+mouse = Controller()
+
+
   
 # open the webpage
 driver.get("http://www.instagram.com")
@@ -35,13 +42,11 @@ time.sleep(5)
   
 driver.get("https://www.instagram.com/zhendawho/followers/")
   
-pop_up_window = driver.find_elements(By.CLASS_NAME, "_aano")
+mouse.position = (525, 573)
   
 # Scroll till Followers list is there
 while True:
-    driver.execute_script(
-        'arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', 
-      pop_up_window)
+    mouse.scroll(0, -2)
     time.sleep(1)
   
 driver.quit()
