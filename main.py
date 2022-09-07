@@ -61,8 +61,10 @@ if __name__ == "__main__":
 
     time.sleep(2)
     mouse = Controller()
-    mouse.position = (525, 573)tor
-    #525, 573
+    mouse.position = (525, 573)
+
+    scroll_counter = 1
+
     while True:
         mouse.scroll(0, -40)
         time.sleep(SCROLL_BUFFER)
@@ -70,6 +72,13 @@ if __name__ == "__main__":
         followers_prev = followers
         followers.update(find_followers(driver))
 
+        if followers_prev == followers:
+            scroll_counter += 1
+        else:
+            scroll_counter = 1
 
-        with open('followers.txt', 'w') as file:
-            file.write('\n'.join(followers) + "\n")
+        if scroll_counter % 180 == 0:
+            break
+    
+    with open('followers.txt', 'w') as file:
+        file.write('\n'.join(followers) + "\n")
