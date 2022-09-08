@@ -37,14 +37,13 @@ def find_followers(driver):
         if(innerText != '.' and innerText != '·') :
             followers.add(innerText)
 
-    print("done!")
     return followers
 
 
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
     PASSWORD = input("Please enter your password: \n")
-    SCROLL_BUFFER = 0.5
+    SCROLL_BUFFER = 1
 
     followers = set()
     driver = webdriver.Chrome()
@@ -71,13 +70,14 @@ if __name__ == "__main__":
 
         followers_prev = followers
         followers.update(find_followers(driver))
+        print(len(followers))
 
-        if followers_prev == followers:
+        if len(followers_prev) == len(followers):
             scroll_counter += 1
         else:
             scroll_counter = 1
 
-        if scroll_counter % 180 == 0:
+        if scroll_counter % 240 == 0:
             break
     
     with open('followers.txt', 'w') as file:
