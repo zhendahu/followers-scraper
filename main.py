@@ -77,7 +77,7 @@ if __name__ == "__main__":
         else:
             scroll_counter = 1
 
-        if scroll_counter % 240 == 0:
+        if scroll_counter % 240 == 0 or mouse.position != (525, 573):
             break
     
     with open('followers.txt', 'w') as file:
