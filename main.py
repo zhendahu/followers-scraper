@@ -72,6 +72,7 @@ if __name__ == "__main__":
     mouse = Controller()
     mouse.position = (525, 573)
 
+    pos_counter = 0
     scroll_counter = 1
 
     while True:
@@ -87,9 +88,17 @@ if __name__ == "__main__":
         else:
             scroll_counter = 1
 
-        if scroll_counter % 240 == 0 or mouse.position != (525, 573):
+        if scroll_counter % 240 == 0:
             print("breaking")
             break
+        
+        if mouse.position != (525, 573):
+            if pos_counter < 4:
+                mouse.position = (525, 573)
+                pos_counter += 1
+            else:
+                print("breaking")
+                break
     
     with open('followers.txt', 'w') as file:
         file.write('\n'.join(followers) + "\n")
