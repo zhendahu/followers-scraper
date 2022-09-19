@@ -39,6 +39,16 @@ def find_followers(driver):
 
     return followers
 
+def find_following(driver):
+    following = set()
+    following_list = driver.find_elements(By.CLASS_NAME, "")
+
+    for i in following_list:
+        innerText = i.get_attribute("innerText")
+        if (innerText != '.' and innerText != '.'):
+            following.add(innerText)
+    
+    return following
 
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
