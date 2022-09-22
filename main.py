@@ -53,7 +53,7 @@ def find_following(driver):
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
     PASSWORD = input("Please enter your password: \n")
-    SCROLL_BUFFER = 1
+    SCROLL_BUFFER = 0.4
 
     followers = set()
     driver = webdriver.Chrome()
@@ -74,29 +74,25 @@ if __name__ == "__main__":
 
     pos_counter = 0
     scroll_counter = 1
+    update_counter = 0
 
     while True:
         mouse.scroll(0, -40)
         time.sleep(SCROLL_BUFFER)
+        update_counter += 1
 
-        followers_prev = followers
-        followers.update(find_followers(driver))
-        print(len(followers))
 
-        if len(followers_prev) == len(followers):
-            scroll_counter += 1
-        else:
-            scroll_counter = 1
+        if update_counter % 240 == 0:
+            followers_prev = followers
+            followers.update(find_followers(driver))
+            print(len(followers))
 
-        if scroll_counter % 240 == 0:
-            print("breaking")
-            break
-        
-        if mouse.position != (525, 573):
-            if pos_counter < 4:
-                mouse.position = (525, 573)
-                pos_counter += 1
+            if len(followers_prev) == len(followers):
+                scroll_counter += 1
             else:
+                scroll_counter = 1
+
+            if scroll_counter % 120 == 0:
                 print("breaking")
                 break
     
