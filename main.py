@@ -60,8 +60,7 @@ if __name__ == "__main__":
     driver.set_window_size(1080, 800)
     driver.set_window_position(0,0)
     driver.get(f"http://www.instagram.com")
-    NUM_FOLLOWERS = driver.find_element(By.CLASS_NAME, "_ac2a")
-    print(NUM_FOLLOWERS)
+    
 
     login(driver)
 
@@ -73,8 +72,12 @@ if __name__ == "__main__":
     time.sleep(2)
     mouse = Controller()
     mouse.position = (525, 573)
-    
+
     update_counter = 0
+
+    num_followers_HTML = driver.find_element(By.CLASS_NAME, "_ac2a")
+    NUM_FOLLOWERS = num_followers_HTML.get_attribute("textContent")
+    print(NUM_FOLLOWERS)
 
     while True:
         mouse.scroll(0, -40)
