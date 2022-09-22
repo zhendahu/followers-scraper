@@ -60,6 +60,8 @@ if __name__ == "__main__":
     driver.set_window_size(1080, 800)
     driver.set_window_position(0,0)
     driver.get(f"http://www.instagram.com")
+    NUM_FOLLOWERS = driver.find_element(By.CLASS_NAME, "_ac2a")
+    print(NUM_FOLLOWERS)
 
     login(driver)
 
@@ -71,9 +73,7 @@ if __name__ == "__main__":
     time.sleep(2)
     mouse = Controller()
     mouse.position = (525, 573)
-
-    pos_counter = 0
-    scroll_counter = 1
+    
     update_counter = 0
 
     while True:
@@ -87,12 +87,7 @@ if __name__ == "__main__":
             followers.update(find_followers(driver))
             print(len(followers))
 
-            if len(followers_prev) == len(followers):
-                scroll_counter += 1
-            else:
-                scroll_counter = 1
-
-            if scroll_counter % 120 == 0:
+            if len(followers) == NUM_FOLLOWERS:
                 print("breaking")
                 break
     
