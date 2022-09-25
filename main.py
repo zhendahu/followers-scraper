@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 from pynput.mouse import Controller
+import re
 
 def login(driver):
     username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[name='username']")))
@@ -66,7 +67,11 @@ if __name__ == "__main__":
     time.sleep(2)
 
     driver.get("http://www.instagram.com/zhendawho/")
-    NUM_FOLLOWERS = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
+
+    time.sleep(1)
+    num_followers_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
+
+    NUM_FOLLOWERS = int(re.sub('[^0-9]', '', num_followers_string))
     print(NUM_FOLLOWERS)
 
     driver.get("http://www.instagram.com/zhendawho/followers")
