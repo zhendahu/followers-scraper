@@ -5,9 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest
 import time
-from pynput.mouse import Button, Controller
+from pynput.mouse import Controller
 
 def login(driver):
     username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"input[name='username']")))
@@ -66,6 +65,9 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
+    driver.get("http://www.instagram.com/zhendawho/")
+    NUM_FOLLOWERS = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
+    print(NUM_FOLLOWERS)
 
     driver.get("http://www.instagram.com/zhendawho/followers")
 
@@ -74,10 +76,6 @@ if __name__ == "__main__":
     mouse.position = (525, 573)
 
     update_counter = 0
-
-    num_followers_HTML = driver.find_element(By.CLASS_NAME, "_ac2a")
-    NUM_FOLLOWERS = num_followers_HTML.get_attribute("textContent")
-    print(NUM_FOLLOWERS)
 
     while True:
         mouse.scroll(0, -40)
