@@ -88,14 +88,14 @@ if __name__ == "__main__":
         update_counter += 1
 
 
-        if update_counter % 240 == 0:
+        if update_counter % 500 == 0:
             followers_prev = followers
             followers.update(find_followers(driver))
             print(len(followers))
 
-            if len(followers) == NUM_FOLLOWERS:
-                print("breaking")
-                break
+        if len(followers) == NUM_FOLLOWERS:
+            print("breaking")
+            break
     
     with open('followers.txt', 'w') as file:
         file.write('\n'.join(followers) + "\n")
