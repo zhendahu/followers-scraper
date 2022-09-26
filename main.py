@@ -51,9 +51,9 @@ def update_following(driver):
     return following
 
 # type parameter will either be "following" or "followers"
-def get_names(driver, type: str):
+def get_names(driver, type: str, username: str):
 
-    driver.get(f"http://www.instagram.com/zhendawho/{type}")
+    driver.get(f"http://www.instagram.com/{username}/{type}")
 
     time.sleep(2)
     mouse = Controller()
@@ -62,7 +62,7 @@ def get_names(driver, type: str):
     update_counter = 0
 
     if type == "followers":
-        while not len(followers) >= NUM_FOLLOWERS - 10:
+        while not len(followers) >= NUM_FOLLOWERS*0.9:
             mouse.scroll(0, -40)
             time.sleep(SCROLL_BUFFER)
             update_counter += 1
@@ -74,7 +74,7 @@ def get_names(driver, type: str):
                 print(len(followers))
     
     else:
-        while not len(following) >= NUM_FOLLOWING - 10:
+        while not len(following) >= NUM_FOLLOWING*0.9:
             mouse.scroll(0, -40)
             time.sleep(SCROLL_BUFFER)
             update_counter += 1
@@ -102,6 +102,7 @@ def find_diff():
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
     PASSWORD = input("Please enter your password: \n")
+    USER_OF_INTEREST = input("Please enter the username of the user you would like to scrape: \n")
     SCROLL_BUFFER = 0.4
 
     followers = set()
@@ -116,7 +117,7 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
-    driver.get("http://www.instagram.com/zhendawho/")
+    driver.get(f"http://www.instagram.com/{USER_OF_INTEREST}/")
 
     time.sleep(1)
     num_followers_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
@@ -131,10 +132,10 @@ if __name__ == "__main__":
     print("num following: ")
     print(NUM_FOLLOWING)
 
-    get_names(driver, followers)
+    get_names(driver, "followers", USER_OF_INTEREST)
     print("got followers")
-    
-    get_names(driver, following)
+
+    get_names(driver, "following", USER_OF_INTEREST)
     print("got following")
 
     find_diff()
