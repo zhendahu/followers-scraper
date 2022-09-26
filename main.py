@@ -28,28 +28,76 @@ def login(driver):
     time.sleep(2)
     not_now2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
 
-
-def find_followers(driver):
+def update_followers(driver):
     followers = set()
     followers_list = driver.find_elements(By.CLASS_NAME, "_ab8y")
 
     for i in followers_list:
         innerText = i.get_attribute("innerText")
-        if(innerText != '.' and innerText != '·') :
+        if(innerText != '.' and innerText != '·' and innerText != 'Verified') :
             followers.add(innerText)
 
     return followers
 
-def find_following(driver):
+def update_following(driver):
     following = set()
     following_list = driver.find_elements(By.CLASS_NAME, "_ab8y")
 
     for i in following_list:
         innerText = i.get_attribute("innerText")
-        if (innerText != '.' and innerText != '.'):
+        if (innerText != '.' and innerText != '.' and innerText != 'Verified'):
             following.add(innerText)
     
     return following
+
+# type parameter will either be "following" or "followers"
+def get_names(driver, type: str):
+
+    driver.get(f"http://www.instagram.com/zhendawho/{type}")
+
+    time.sleep(2)
+    mouse = Controller()
+    mouse.position = (525, 573)
+
+    update_counter = 0
+
+    if type == "followers":
+        while not len(followers) >= NUM_FOLLOWERS - 10:
+            mouse.scroll(0, -40)
+            time.sleep(SCROLL_BUFFER)
+            update_counter += 1
+
+            if update_counter % 500 == 0:
+                followers.update(update_followers(driver))
+                with open('followers.txt', 'w') as file:
+                    file.write('\n'.join(followers) + "\n")
+                print(len(followers))
+    
+    else:
+        while not len(following) >= NUM_FOLLOWING - 10:
+            mouse.scroll(0, -40)
+            time.sleep(SCROLL_BUFFER)
+            update_counter += 1
+
+            if update_counter % 500 == 0:
+                following.update(update_following(driver))
+                with open('following.txt', 'w') as file:
+                    file.write('\n'.join(following) + "\n")
+                print(len(following))
+
+def find_diff():
+    with open("followers.txt") as followers:
+        contents = followers.read()
+        with open("following.txt") as following:
+            following_lines = following.readlines()
+            print("Listed below are users who do not follow you back.")
+            for i in range(len(following_lines)):
+                if following_lines[i] not in contents:
+                    print(following_lines[i])
+
+            following.close()
+    followers.close()
+
 
 if __name__ == "__main__":
     USERNAME = input("Please enter your username: \n")
@@ -83,52 +131,13 @@ if __name__ == "__main__":
     print("num following: ")
     print(NUM_FOLLOWING)
 
-    # driver.get("http://www.instagram.com/zhendawho/followers")
-
-    # time.sleep(2)
-    # mouse = Controller()
-    # mouse.position = (525, 573)
-
-    # update_counter = 0
-
-    # while True:
-    #     mouse.scroll(0, -40)
-    #     time.sleep(SCROLL_BUFFER)
-    #     update_counter += 1
-
-
-    #     if update_counter % 500 == 0:
-    #         followers_prev = followers
-    #         followers.update(find_followers(driver))
-    #         with open('followers.txt', 'w') as file:
-    #             file.write('\n'.join(followers) + "\n")
-    #         print(len(followers))
-
-    #     if len(followers) == NUM_FOLLOWERS or len(followers) == NUM_FOLLOWERS - 1:
-    #         print("breaking")
-    #         break
+    get_names(driver, followers)
+    print("got followers")
     
-    driver.get("http://www.instagram.com/zhendawho/following")
+    get_names(driver, following)
+    print("got following")
 
-    time.sleep(2)
-    mouse = Controller()
-    mouse.position = (525, 573)
+    find_diff()
 
-    update_counter = 0 
 
-    while True:
-        mouse.scroll(0, -40)
-        time.sleep(SCROLL_BUFFER)
-        update_counter += 1
-
-        if update_counter % 500 == 0:
-            following_prev = following
-            following.update(find_following(driver))
-            with open('following.txt', 'w') as file:
-                file.write('\n'.join(following) + "\n")
-            print(len(following))
-        
-        if len(following) == NUM_FOLLOWING or len(following) == NUM_FOLLOWING - 1:
-            print("breaking")
-            break
     
