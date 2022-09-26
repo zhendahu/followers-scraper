@@ -1,4 +1,5 @@
 from datetime import datetime
+from turtle import update
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -41,7 +42,7 @@ def find_followers(driver):
 
 def find_following(driver):
     following = set()
-    following_list = driver.find_elements(By.CLASS_NAME, "")
+    following_list = driver.find_elements(By.CLASS_NAME, "_ab8y")
 
     for i in following_list:
         innerText = i.get_attribute("innerText")
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     SCROLL_BUFFER = 0.4
 
     followers = set()
+    following = set()
     driver = webdriver.Chrome()
     driver.set_window_size(1080, 800)
     driver.set_window_position(0,0)
@@ -71,31 +73,62 @@ if __name__ == "__main__":
     time.sleep(1)
     num_followers_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
 
+    num_following_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[3]/a/div/span').text
+
     NUM_FOLLOWERS = int(re.sub('[^0-9]', '', num_followers_string))
+    print("num followers: ")
     print(NUM_FOLLOWERS)
 
-    driver.get("http://www.instagram.com/zhendawho/followers")
+    NUM_FOLLOWING = int(re.sub('[^0-9]', '', num_following_string))
+    print("num following: ")
+    print(NUM_FOLLOWING)
+
+    # driver.get("http://www.instagram.com/zhendawho/followers")
+
+    # time.sleep(2)
+    # mouse = Controller()
+    # mouse.position = (525, 573)
+
+    # update_counter = 0
+
+    # while True:
+    #     mouse.scroll(0, -40)
+    #     time.sleep(SCROLL_BUFFER)
+    #     update_counter += 1
+
+
+    #     if update_counter % 500 == 0:
+    #         followers_prev = followers
+    #         followers.update(find_followers(driver))
+    #         with open('followers.txt', 'w') as file:
+    #             file.write('\n'.join(followers) + "\n")
+    #         print(len(followers))
+
+    #     if len(followers) == NUM_FOLLOWERS or len(followers) == NUM_FOLLOWERS - 1:
+    #         print("breaking")
+    #         break
+    
+    driver.get("http://www.instagram.com/zhendawho/following")
 
     time.sleep(2)
     mouse = Controller()
     mouse.position = (525, 573)
 
-    update_counter = 0
+    update_counter = 0 
 
     while True:
         mouse.scroll(0, -40)
         time.sleep(SCROLL_BUFFER)
         update_counter += 1
 
-
         if update_counter % 500 == 0:
-            followers_prev = followers
-            followers.update(find_followers(driver))
-            print(len(followers))
-
-        if len(followers) == NUM_FOLLOWERS:
+            following_prev = following
+            following.update(find_following(driver))
+            with open('following.txt', 'w') as file:
+                file.write('\n'.join(following) + "\n")
+            print(len(following))
+        
+        if len(following) == NUM_FOLLOWING or len(following) == NUM_FOLLOWING - 1:
             print("breaking")
             break
     
-    with open('followers.txt', 'w') as file:
-        file.write('\n'.join(followers) + "\n")
