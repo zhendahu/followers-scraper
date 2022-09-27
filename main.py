@@ -62,6 +62,12 @@ def update_following(driver):
 # This will get the full list of usernames for either followers and following, and will write them into either "followers.txt" or "following.txt"
 # the "type" parameter will either be "following" or "followers"
 def get_names(driver, type: str, username: str):
+    update_buffer = 500
+
+    if type == "followers" and NUM_FOLLOWERS < 700:
+        update_buffer = 250
+    elif type == "following" and NUM_FOLLOWING < 700:
+        update_buffer = 250
 
     driver.get(f"http://www.instagram.com/{username}/{type}")
 
@@ -81,11 +87,12 @@ def get_names(driver, type: str, username: str):
             update_counter += 1
 
             # Every 500 iterations, update the followers set once. We do this in order to speed up the process, as updating the set every iteration will drastically slow the program down.
-            if update_counter % 500 == 0:
+            if update_counter % update_buffer == 0:
                 followers.update(update_followers(driver))
                 with open('followers.txt', 'w') as file:
                     file.write('\n'.join(followers) + "\n")
                 print(len(followers))
+                update_buffer = ((NUM_FOLLOWERS - len(followers))/NUM_FOLLOWERS)*500
     
     else:
         while not len(following) >= NUM_FOLLOWING*0.85:
@@ -93,11 +100,12 @@ def get_names(driver, type: str, username: str):
             time.sleep(SCROLL_BUFFER)
             update_counter += 1
 
-            if update_counter % 500 == 0:
+            if update_counter % update_buffer == 0:
                 following.update(update_following(driver))
                 with open('following.txt', 'w') as file:
                     file.write('\n'.join(following) + "\n")
                 print(len(following))
+                update_buffer = ((NUM_FOLLOWING - len(followers))/NUM_FOLLOWING)*500
 
 # Prints out the names of users you follow but don't follow you back.
 def find_diff():
