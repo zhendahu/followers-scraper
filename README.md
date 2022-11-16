@@ -1,5 +1,7 @@
 # Followers Scraper
 
+A program that tells you who doesn't follow you back on Instagram!
+
 ## _**Introduction**_
 
 This program is intended to print out a list of Instagram users that do not follow you back. This program does so using Selenium and without any unlicensed APIs, making this procedure compliant with Instagram's terms of service.
