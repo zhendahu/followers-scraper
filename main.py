@@ -91,7 +91,7 @@ def get_names(driver, type: str, username: str):
                 followers.update(update_followers(driver))
                 with open('followers.txt', 'w') as file:
                     file.write('\n'.join(followers) + "\n")
-                print(len(followers))
+              
                 # update_buffer = ((NUM_FOLLOWERS - len(followers))/NUM_FOLLOWERS)*500
     
     else:
@@ -104,7 +104,7 @@ def get_names(driver, type: str, username: str):
                 following.update(update_following(driver))
                 with open('following.txt', 'w') as file:
                     file.write('\n'.join(following) + "\n")
-                print(len(following))
+            
                 # update_buffer = ((NUM_FOLLOWING - len(followers))/NUM_FOLLOWING)*500
 
 # Prints out the names of users you follow but don't follow you back.
@@ -161,10 +161,8 @@ if __name__ == "__main__":
     print(NUM_FOLLOWING)
 
     get_names(driver, "followers", USERNAME)
-    print("got followers")
 
     get_names(driver, "following", USERNAME)
-    print("got following")
 
     find_diff()
 
