@@ -95,7 +95,7 @@ def get_names(driver, type: str, username: str):
                 # update_buffer = ((NUM_FOLLOWERS - len(followers))/NUM_FOLLOWERS)*500
     
     else:
-        while not len(following) >= NUM_FOLLOWING*0.95:
+        while not len(following) >= NUM_FOLLOWING*0.85:
             mouse.scroll(0, -40)
             time.sleep(SCROLL_BUFFER)
             update_counter += 1
@@ -145,12 +145,12 @@ if __name__ == "__main__":
 
     driver.get(f"http://www.instagram.com/{USERNAME}/")
 
-    time.sleep(1)
+    time.sleep(3)
     
-    # Gets the number of followers the user has and the number of other users the user is following.
-    num_followers_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/div/span').text
+    #Gets the number of followers the user has and the number of other users the user is following.
+    num_followers_string = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/div/header/section/ul/li[2]/a/div').text
 
-    num_following_string = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[3]/a/div/span').text
+    num_following_string = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/div/header/section/ul/li[3]/a/div/span/span').text
 
     NUM_FOLLOWERS = int(re.sub('[^0-9]', '', num_followers_string))
     print("num followers: ")
