@@ -91,11 +91,12 @@ def get_names(driver, type: str, username: str):
                 followers.update(update_followers(driver))
                 with open('followers.txt', 'w') as file:
                     file.write('\n'.join(followers) + "\n")
+                print(len(followers))
               
                 # update_buffer = ((NUM_FOLLOWERS - len(followers))/NUM_FOLLOWERS)*500
     
     else:
-        while not len(following) >= NUM_FOLLOWING*0.85:
+        while not len(following) >= NUM_FOLLOWING*0.95:
             mouse.scroll(0, -40)
             time.sleep(SCROLL_BUFFER)
             update_counter += 1
@@ -104,6 +105,7 @@ def get_names(driver, type: str, username: str):
                 following.update(update_following(driver))
                 with open('following.txt', 'w') as file:
                     file.write('\n'.join(following) + "\n")
+                print(len(following))
             
                 # update_buffer = ((NUM_FOLLOWING - len(followers))/NUM_FOLLOWING)*500
 
